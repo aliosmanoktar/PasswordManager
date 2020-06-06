@@ -27,7 +27,7 @@ class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
         private var isShow = false
         fun bindItems(item: PasswordModel) {
             hesapAdi.text = item.HesapAdi
-            hesapKullaniciAdi.text = item.Sifre
+            hesapKullaniciAdi.text = item.KullaniciAdi
             show.setOnClickListener {
                 if (!isShow) {
                     sifre.text = item.GetPasswordHide()

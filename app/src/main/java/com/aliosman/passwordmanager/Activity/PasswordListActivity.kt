@@ -38,7 +38,7 @@ class PasswordListActivity : AppCompatActivity() {
     }
 
     private fun getItems() {
-        Backgrounds().getPasswords(object : IGetPasswords {
+        Backgrounds().listenPassword(object : IGetPasswords {
             override fun OnSucces(mutableList: MutableList<PasswordModel>) {
                 recylerview.adapter =
                     PasswordAdapter(mutableList)

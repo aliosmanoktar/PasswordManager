@@ -6,6 +6,7 @@
 
 package com.aliosman.passwordmanager.Background
 
+import android.util.Log
 import com.aliosman.passwordmanager.Models.PasswordModel
 import com.aliosman.passwordmanager.Models.getData
 import com.google.firebase.firestore.ktx.firestore
@@ -21,6 +22,7 @@ class Backgrounds {
     }
 
     fun getPasswords(listener: IGetPasswords) {
+        //listenPassword(listener)
         collections.get().addOnSuccessListener { result ->
             val items = mutableListOf<PasswordModel>()
             for (document in result)
@@ -28,6 +30,19 @@ class Backgrounds {
             listener.OnSucces(items)
         }.addOnFailureListener { e ->
             listener.OnFailure(e.message)
+        }
+    }
+
+    private val TAG = javaClass.name
+    fun listenPassword(listener: IGetPasswords) {
+        collections.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null) {
+                return@addSnapshotListener
+            }
+            if (querySnapshot != null) {
+                Log.e(TAG, "listenPassword: ")
+                getPasswords(listener)
+            }
         }
     }
 }
