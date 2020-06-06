@@ -4,7 +4,7 @@
  * Copyright (c) 2020.
  */
 
-package com.aliosman.passwordmanager
+package com.aliosman.passwordmanager.Adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.aliosman.passwordmanager.Models.PasswordModel
+import com.aliosman.passwordmanager.R
 
 class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
     RecyclerView.Adapter<PasswordAdapter.PasswordViewHolder>() {
@@ -50,7 +52,9 @@ class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PasswordViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.password_item, parent, false)
-        return PasswordViewHolder(view)
+        return PasswordViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int {
