@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Ali Osman OKTAR
+  ~ Aliosmanoktar@gmail.com
+  ~ Copyright (c) 2020.
+  -->
+
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false"></base-config>
+</network-security-config>

@@ -1,8 +1,15 @@
+/*
+ * Ali Osman OKTAR
+ * Aliosmanoktar@gmail.com
+ * Copyright (c) 2020.
+ */
+
 package com.aliosman.passwordmanager
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DatabaseReference
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
