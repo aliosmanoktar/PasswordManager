@@ -22,7 +22,6 @@ class Backgrounds {
     }
 
     fun getPasswords(listener: IGetPasswords) {
-        //listenPassword(listener)
         collections.get().addOnSuccessListener { result ->
             val items = mutableListOf<PasswordModel>()
             for (document in result)
