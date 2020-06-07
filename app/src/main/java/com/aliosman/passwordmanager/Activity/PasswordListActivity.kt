@@ -11,10 +11,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.aliosman.passwordmanager.Adapter.IRecylerItems
 import com.aliosman.passwordmanager.Adapter.PasswordAdapter
 import com.aliosman.passwordmanager.Background.Backgrounds
 import com.aliosman.passwordmanager.Background.IGetPasswords
 import com.aliosman.passwordmanager.Models.PasswordModel
+import com.aliosman.passwordmanager.Models.key_item
 import com.aliosman.passwordmanager.R
 import kotlinx.android.synthetic.main.activity_password_list.*
 
@@ -22,6 +24,7 @@ class PasswordListActivity : AppCompatActivity() {
 
     lateinit var recylerview: RecyclerView
     private val TAG = javaClass.name
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_list)
@@ -41,7 +44,7 @@ class PasswordListActivity : AppCompatActivity() {
         Backgrounds().listenPassword(object : IGetPasswords {
             override fun OnSucces(mutableList: MutableList<PasswordModel>) {
                 recylerview.adapter =
-                    PasswordAdapter(mutableList)
+                    PasswordAdapter(mutableList, itemClick = Click)
             }
 
             override fun OnFailure(message: String?) {
@@ -49,5 +52,20 @@ class PasswordListActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    val Click: IRecylerItems<PasswordModel> = object : IRecylerItems<PasswordModel> {
+        override fun Select(item: PasswordModel) {
+            val i = Intent(baseContext, AddedPasswordActivity::class.java)
+            val b = Bundle()
+            b.putSerializable(key_item, item)
+            i.putExtras(b)
+            startActivity(i)
+        }
+
+        override fun LongClick(item: PasswordModel) {
+
+        }
+
     }
 }

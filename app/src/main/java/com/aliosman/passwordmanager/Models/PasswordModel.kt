@@ -8,6 +8,7 @@ package com.aliosman.passwordmanager.Models
 
 import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import java.io.Serializable
 import java.nio.charset.Charset
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -18,7 +19,7 @@ data class PasswordModel(
     val KullaniciAdi: String,
     val Sifre: String,
     val ID: String? = null
-) {
+) : Serializable {
     fun GetPasswordHide(): String {
         var a = ""
         for (i in 0..Sifre.length)
@@ -27,19 +28,18 @@ data class PasswordModel(
     }
 
     fun getPutData() = hashMapOf(
-        "HesapAdi" to HesapAdi,
-        "KullaniciAdi" to KullaniciAdi,
-        "Sifre" to Blob.fromBytes(encrypt(clear = Sifre))
+        key_HesapAdi to HesapAdi,
+        key_KullaniciAdi to KullaniciAdi,
+        key_Sifre to Blob.fromBytes(encrypt(clear = Sifre))
     )
 }
 
-private val TAG = "GETDATA"
 fun getData(item: QueryDocumentSnapshot): PasswordModel {
     val data = item.data
     return PasswordModel(
-        HesapAdi = data["HesapAdi"] as String,
-        KullaniciAdi = data["KullaniciAdi"] as String,
-        Sifre = decrypt((data["Sifre"] as Blob).toBytes()),
+        HesapAdi = data[key_HesapAdi] as String,
+        KullaniciAdi = data[key_KullaniciAdi] as String,
+        Sifre = decrypt((data[key_Sifre] as Blob).toBytes()),
         ID = item.id
     )
 }

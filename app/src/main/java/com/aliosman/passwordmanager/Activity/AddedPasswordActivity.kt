@@ -14,32 +14,58 @@ import androidx.appcompat.app.AppCompatActivity
 import com.aliosman.passwordmanager.Background.Backgrounds
 import com.aliosman.passwordmanager.Background.IAddAndUpdate
 import com.aliosman.passwordmanager.Models.PasswordModel
+import com.aliosman.passwordmanager.Models.key_item
 import com.aliosman.passwordmanager.R
 import com.google.android.material.textfield.TextInputEditText
 
 class AddedPasswordActivity : AppCompatActivity() {
+    var PasswordItem: PasswordModel? = null
     lateinit var HesapAdi: TextInputEditText
     lateinit var KullaniciAdi: TextInputEditText
     lateinit var Sifre: TextInputEditText
     lateinit var kaydet: Button
     private val TAG = javaClass.name
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_added_password)
+        PasswordItem = intent.extras?.getSerializable(key_item) as? PasswordModel
         HesapAdi = findViewById(R.id.AddedActivity_hesap_adi)
         KullaniciAdi = findViewById(R.id.AddedActivity_kullanici_adi)
         Sifre = findViewById(R.id.AddedActivity_sifre)
         kaydet = findViewById(R.id.AddedActivity_kaydet)
+        if (PasswordItem != null) {
+            HesapAdi.setText(PasswordItem!!.HesapAdi)
+            KullaniciAdi.setText(PasswordItem!!.KullaniciAdi)
+            Sifre.setText(PasswordItem!!.Sifre)
+        }
         kaydet.setOnClickListener(kaydetClick)
+
     }
 
-    val kaydetClick = View.OnClickListener {
-        var item = PasswordModel(
+    private fun GetData(): PasswordModel =
+        PasswordModel(
             HesapAdi = HesapAdi.text.toString(),
             KullaniciAdi = KullaniciAdi.text.toString(),
-            Sifre = Sifre.text.toString()
+            Sifre = Sifre.text.toString(),
+            ID = PasswordItem?.ID
         )
-        Backgrounds().AddPassword(item, object : IAddAndUpdate {
+
+    fun Update() {
+        var item = GetData()
+        Backgrounds().UploadPassword(GetData(), object : IAddAndUpdate {
+            override fun OnSucces() {
+                Log.e(TAG, "Update OnSucces: ")
+            }
+
+            override fun OnFailure(message: String?) {
+                Log.e(TAG, "Update OnFailure: $message")
+            }
+        })
+    }
+
+    fun Kaydet() {
+        Backgrounds().AddPassword(GetData(), object : IAddAndUpdate {
             override fun OnSucces() {
                 Log.e(TAG, "OnSucces: ")
             }
@@ -49,5 +75,12 @@ class AddedPasswordActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    val kaydetClick = View.OnClickListener {
+        if (PasswordItem == null)
+            Kaydet()
+        else
+            Update()
     }
 }

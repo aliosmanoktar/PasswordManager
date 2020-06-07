@@ -21,6 +21,11 @@ class Backgrounds {
             .addOnFailureListener { e -> listener.OnFailure(e.message) }
     }
 
+    fun UploadPassword(item: PasswordModel, listener: IAddAndUpdate) {
+        collections.document(item.ID!!).set(item.getPutData())
+            .addOnSuccessListener { listener.OnSucces() }
+    }
+
     fun getPasswords(listener: IGetPasswords) {
         collections.get().addOnSuccessListener { result ->
             val items = mutableListOf<PasswordModel>()

@@ -15,17 +15,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.passwordmanager.Models.PasswordModel
 import com.aliosman.passwordmanager.R
 
-class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
+class PasswordAdapter(
+    val PasswordItems: MutableList<PasswordModel>,
+    val itemClick: IRecylerItems<PasswordModel>
+) :
     RecyclerView.Adapter<PasswordAdapter.PasswordViewHolder>() {
 
     class PasswordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val TAG = javaClass.name
         private val hesapAdi: TextView = itemView.findViewById(R.id.password_item_hesapAdi)
         private val hesapKullaniciAdi: TextView =
             itemView.findViewById(R.id.password_item_kullaniciAdi)
         private val sifre: TextView = itemView.findViewById(R.id.password_item_hesapSifre)
         private val show: ImageView = itemView.findViewById(R.id.password_item_show)
         private var isShow = false
-        fun bindItems(item: PasswordModel) {
+        fun bindItems(item: PasswordModel, itemClick: IRecylerItems<PasswordModel>) {
             hesapAdi.text = item.HesapAdi
             hesapKullaniciAdi.text = item.KullaniciAdi
             show.setOnClickListener {
@@ -45,6 +49,9 @@ class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
                 }
             }
             show.callOnClick()
+            itemView.setOnClickListener {
+                itemClick.Select(item)
+            }
         }
 
     }
@@ -62,6 +69,6 @@ class PasswordAdapter(val PasswordItems: MutableList<PasswordModel>) :
     }
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
-        holder.bindItems(PasswordItems[position])
+        holder.bindItems(PasswordItems[position], itemClick = itemClick)
     }
 }
