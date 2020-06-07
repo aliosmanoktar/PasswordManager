@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.aliosman.passwordmanager.Adapter.EmptyAdapter
 import com.aliosman.passwordmanager.Adapter.IRecylerItems
 import com.aliosman.passwordmanager.Adapter.PasswordAdapter
 import com.aliosman.passwordmanager.Background.Backgrounds
@@ -43,8 +44,11 @@ class PasswordListActivity : AppCompatActivity() {
     private fun getItems() {
         Backgrounds().listenPassword(object : IGetPasswords {
             override fun OnSucces(mutableList: MutableList<PasswordModel>) {
+                Log.e(TAG, "OnSucces: ${mutableList.size}")
                 recylerview.adapter =
-                    PasswordAdapter(mutableList, itemClick = Click)
+                    if (mutableList.size != 0)
+                        PasswordAdapter(mutableList, itemClick = Click)
+                    else EmptyAdapter()
             }
 
             override fun OnFailure(message: String?) {

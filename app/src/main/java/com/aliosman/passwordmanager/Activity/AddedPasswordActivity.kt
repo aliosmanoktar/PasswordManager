@@ -77,7 +77,6 @@ class AddedPasswordActivity : AppCompatActivity() {
         )
 
     fun Update() {
-        var item = GetData()
         Backgrounds().UploadPassword(GetData(), object : IAddAndUpdate {
             override fun OnSucces() {
                 Log.e(TAG, "Update OnSucces: ")
