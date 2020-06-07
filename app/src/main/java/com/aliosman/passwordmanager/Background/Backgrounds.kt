@@ -24,6 +24,17 @@ class Backgrounds {
     fun UploadPassword(item: PasswordModel, listener: IAddAndUpdate) {
         collections.document(item.ID!!).set(item.getPutData())
             .addOnSuccessListener { listener.OnSucces() }
+            .addOnFailureListener { e ->
+                listener.OnFailure(e.message)
+            }
+    }
+
+    fun RemovePassword(item: PasswordModel, listener: IAddAndUpdate) {
+        collections.document(item.ID!!).delete()
+            .addOnSuccessListener { listener.OnSucces() }
+            .addOnFailureListener { e ->
+                listener.OnFailure(e.message)
+            }
     }
 
     fun getPasswords(listener: IGetPasswords) {

@@ -8,6 +8,8 @@ package com.aliosman.passwordmanager.Activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +42,30 @@ class AddedPasswordActivity : AppCompatActivity() {
             Sifre.setText(PasswordItem!!.Sifre)
         }
         kaydet.setOnClickListener(kaydetClick)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.password_added_menu, menu)
+        return PasswordItem != null
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.delete_password_menu)
+            Backgrounds().RemovePassword(PasswordItem!!, object : IAddAndUpdate {
+                override fun OnSucces() {
+                    Log.e(TAG, "Remove OnSucces")
+                }
+
+                override fun OnFailure(message: String?) {
+                    Log.e(TAG, "Remove OnFailure")
+                }
+
+            })
+        else if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return true
     }
 
     private fun GetData(): PasswordModel =
