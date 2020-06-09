@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.aliosman.passwordmanager.Adapter.DialogAdapter
 import com.aliosman.passwordmanager.Adapter.EmptyAdapter
 import com.aliosman.passwordmanager.Adapter.IRecylerItems
 import com.aliosman.passwordmanager.Adapter.PasswordAdapter
@@ -24,8 +25,8 @@ import kotlinx.android.synthetic.main.activity_password_list.*
 class PasswordListActivity : AppCompatActivity() {
 
     lateinit var recylerview: RecyclerView
+    lateinit var dialogAdapter: DialogAdapter
     private val TAG = javaClass.name
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_list)
@@ -38,13 +39,19 @@ class PasswordListActivity : AppCompatActivity() {
                 )
             )
         }
+        dialogAdapter = DialogAdapter(this)
         getItems()
+
     }
 
     private fun getItems() {
+        dialogAdapter.loaing()
+        dialogAdapter.Show()
+        dialogAdapter.setTitle("Şifreler Yükleniyor Lütfen Bekleyiniz")
         Backgrounds().listenPassword(object : IGetPasswords {
             override fun OnSucces(mutableList: MutableList<PasswordModel>) {
                 Log.e(TAG, "OnSucces: ${mutableList.size}")
+                dialogAdapter.Hide()
                 recylerview.adapter =
                     if (mutableList.size != 0)
                         PasswordAdapter(mutableList, itemClick = Click)
