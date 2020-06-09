@@ -13,8 +13,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.aliosman.passwordmanager.Adapter.DialogAdapter
 import com.aliosman.passwordmanager.Background.Backgrounds
 import com.aliosman.passwordmanager.Background.IAddAndUpdate
+import com.aliosman.passwordmanager.Models.IButtonClick
 import com.aliosman.passwordmanager.Models.PasswordModel
 import com.aliosman.passwordmanager.Models.key_item
 import com.aliosman.passwordmanager.R
@@ -27,7 +29,7 @@ class AddedPasswordActivity : AppCompatActivity() {
     lateinit var Sifre: TextInputEditText
     lateinit var kaydet: Button
     private val TAG = javaClass.name
-
+    lateinit var dialog: DialogAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_added_password)
@@ -43,6 +45,7 @@ class AddedPasswordActivity : AppCompatActivity() {
         }
         kaydet.setOnClickListener(kaydetClick)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        dialog = DialogAdapter(this)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -55,6 +58,16 @@ class AddedPasswordActivity : AppCompatActivity() {
             Backgrounds().RemovePassword(PasswordItem!!, object : IAddAndUpdate {
                 override fun OnSucces() {
                     Log.e(TAG, "Remove OnSucces")
+                    dialog.setTitle("Silme Başarılı")
+                    dialog.succes()
+                    dialog.Show()
+                    dialog.setClick(object : IButtonClick {
+                        override fun Click() {
+                            dialog.Hide()
+                            finish()
+                        }
+
+                    })
                 }
 
                 override fun OnFailure(message: String?) {
@@ -79,11 +92,20 @@ class AddedPasswordActivity : AppCompatActivity() {
     fun Update() {
         Backgrounds().UploadPassword(GetData(), object : IAddAndUpdate {
             override fun OnSucces() {
-                Log.e(TAG, "Update OnSucces: ")
+                dialog.setTitle("Şifre Başarılı Bir Şekilde Kaydedildi")
+                dialog.succes()
             }
 
             override fun OnFailure(message: String?) {
+                dialog.setTitle("Şifre Kaydedilmesi sırasında hata oluştu!!")
+                dialog.OnError()
                 Log.e(TAG, "Update OnFailure: $message")
+            }
+        })
+        dialog.setClick(object : IButtonClick {
+            override fun Click() {
+                dialog.Hide()
+                finish()
             }
         })
     }
@@ -91,20 +113,33 @@ class AddedPasswordActivity : AppCompatActivity() {
     fun Kaydet() {
         Backgrounds().AddPassword(GetData(), object : IAddAndUpdate {
             override fun OnSucces() {
-                Log.e(TAG, "OnSucces: ")
+                dialog.setTitle("Şifre Başarılı Bir Şekilde Kaydedildi")
+                dialog.succes()
             }
 
             override fun OnFailure(message: String?) {
                 Log.e(TAG, "OnFailure: $message")
+                dialog.setTitle("Şifre Kaydedilmesi sırasında hata oluştu!!")
+                dialog.OnError()
             }
-
+        })
+        dialog.setClick(object : IButtonClick {
+            override fun Click() {
+                dialog.Hide()
+                finish()
+            }
         })
     }
 
     val kaydetClick = View.OnClickListener {
-        if (PasswordItem == null)
+        if (PasswordItem == null) {
             Kaydet()
-        else
+            dialog.setTitle("Şifre Kaydediliyor lütfen bekleyiniz!!")
+        } else {
             Update()
+            dialog.setTitle("Şifre güncelleniyor lütfen bekleyiniz!!")
+        }
+        dialog.loaing()
+        dialog.Show()
     }
 }
