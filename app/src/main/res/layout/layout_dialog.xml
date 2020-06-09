@@ -28,18 +28,39 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/dialog_btn"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/shape_btn_rounded"
-            android:backgroundTint="#00b576"
-            android:text="Kapat"
-            android:textColor="@color/white" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/dialog_btn_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_btn_rounded"
+                android:backgroundTint="@color/color_error"
+                android:text="Sil"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/dialog_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_btn_rounded"
+                android:backgroundTint="#00b576"
+                android:text="Kapat"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -63,7 +84,8 @@
             android:layout_height="70dp"
             android:layout_centerInParent="true"
             android:scaleType="center"
-            android:src="@drawable/ic_success" />
+            android:src="@drawable/ic_question"
+            android:tint="@color/white" />
 
         <ProgressBar
             android:id="@+id/dialog_progress"

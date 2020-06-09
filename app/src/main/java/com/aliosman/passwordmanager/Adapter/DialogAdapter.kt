@@ -26,6 +26,7 @@ class DialogAdapter(val context: Context) {
     private lateinit var button: Button
     private lateinit var progess: ProgressBar
     private lateinit var background: RelativeLayout
+    private lateinit var button1: Button
 
     init {
         createDialog(AlertDialog.Builder(context))
@@ -41,13 +42,15 @@ class DialogAdapter(val context: Context) {
         dialog.setCanceledOnTouchOutside(false)
         img = dialogView.findViewById(R.id.dialog_image)
         button = dialogView.findViewById(R.id.dialog_btn)
+        button1 = dialogView.findViewById(R.id.dialog_btn_remove)
         text = dialogView.findViewById(R.id.dialog_text)
         progess = dialogView.findViewById(R.id.dialog_progress)
         background = dialogView.findViewById(R.id.dialog_img_background)
     }
 
     fun Show() {
-        dialog.show()
+        if (!dialog.isShowing)
+            dialog.show()
     }
 
     fun setClick(click: IButtonClick): DialogAdapter {
@@ -57,7 +60,14 @@ class DialogAdapter(val context: Context) {
         return this
     }
 
+    fun setClick1(click: IButtonClick) {
+        button1.setOnClickListener {
+            click.Click()
+        }
+    }
+
     fun loaing() {
+        button1.visibility = View.GONE
         progess.visibility = View.VISIBLE
         img.visibility = View.GONE
         button.visibility = View.GONE
@@ -65,6 +75,7 @@ class DialogAdapter(val context: Context) {
     }
 
     fun succes() {
+        button1.visibility = View.GONE
         progess.visibility = View.GONE
         img.visibility = View.VISIBLE
         button.visibility = View.VISIBLE
@@ -74,6 +85,7 @@ class DialogAdapter(val context: Context) {
     }
 
     fun OnError() {
+        button1.visibility = View.GONE
         progess.visibility = View.GONE
         img.visibility = View.VISIBLE
         button.visibility = View.VISIBLE
@@ -82,54 +94,21 @@ class DialogAdapter(val context: Context) {
         button.background.setTint(ContextCompat.getColor(context, R.color.color_error))
     }
 
+    fun Question() {
+        progess.visibility = View.GONE
+        img.visibility = View.VISIBLE
+        button.visibility = View.VISIBLE
+        button1.visibility = View.VISIBLE
+        img.setImageDrawable(context.resources.getDrawable(R.drawable.ic_question, null))
+        background.background.setTint(ContextCompat.getColor(context, R.color.color_question))
+        button.background.setTint(ContextCompat.getColor(context, R.color.color_question))
+    }
+
     fun setTitle(title: String) {
         text.text = title
     }
 
     fun Hide() {
-        dialog.dismiss()
+        dialog.hide()
     }
-    /*override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val v = inflater.inflate(R.layout.layout_dialog,container,false)
-        img=v.findViewById(R.id.dialog_image)
-        button=v.findViewById(R.id.dialog_btn)
-        text=v.findViewById(R.id.dialog_text)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCanceledOnTouchOutside(false)
-        setClick()
-        return v
-    }
-
-    fun settitle(title: String){
-        text.text=title
-    }
-
-    fun loaing(){
-        img.visibility=View.GONE
-        button.visibility=View.GONE
-        background.background.setTint(ContextCompat.getColor(context!!,R.color.color_loading))
-    }
-
-    fun succes(){
-        progess.visibility=View.GONE
-        img.visibility=View.VISIBLE
-        button.visibility=View.VISIBLE
-        img.setImageDrawable(resources.getDrawable(R.drawable.ic_success,null))
-        background.background.setTint(ContextCompat.getColor(context!!,R.color.color_succes))
-        button.background.setTint(ContextCompat.getColor(context!!,R.color.color_succes))
-    }
-
-    fun OnError(){
-        progess.visibility=View.GONE
-        img.visibility=View.VISIBLE
-        button.visibility=View.VISIBLE
-        img.setImageDrawable(resources.getDrawable(R.drawable.ic_dialog_error,null))
-        background.background.setTint(ContextCompat.getColor(context!!,R.color.color_error))
-        button.background.setTint(ContextCompat.getColor(context!!,R.color.color_error))
-    }*/
 }

@@ -61,33 +61,47 @@ class AddedPasswordActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.delete_password_menu)
-            Backgrounds().RemovePassword(PasswordItem!!, object : IAddAndUpdate {
-                override fun OnSucces() {
-                    Log.e(TAG, "Remove OnSucces")
-                    dialog.setTitle("Silme Başarılı")
-                    dialog.succes()
-                    dialog.Show()
-                    dialog.setClick(object : IButtonClick {
-                        override fun Click() {
-                            dialog.Hide()
-                            finish()
-                        }
-
-                    })
+        if (item.itemId == R.id.delete_password_menu) {
+            dialog.Question()
+            dialog.setClick1(object : IButtonClick {
+                override fun Click() {
+                    Remove()
                 }
-
-                override fun OnFailure(message: String?) {
-                    Log.e(TAG, "Remove OnFailure")
-                }
-
             })
-        else if (item.itemId == android.R.id.home) {
+            dialog.setClick(object : IButtonClick {
+                override fun Click() {
+                    dialog.Hide()
+                }
+            })
+            dialog.Show()
+        } else if (item.itemId == android.R.id.home) {
             finish()
         }
         return true
     }
 
+    private fun Remove() {
+        Backgrounds().RemovePassword(PasswordItem!!, object : IAddAndUpdate {
+            override fun OnSucces() {
+                Log.e(TAG, "Remove OnSucces")
+                dialog.setTitle("Silme Başarılı")
+                dialog.succes()
+                dialog.Show()
+                dialog.setClick(object : IButtonClick {
+                    override fun Click() {
+                        dialog.Hide()
+                        finish()
+                    }
+
+                })
+            }
+
+            override fun OnFailure(message: String?) {
+                Log.e(TAG, "Remove OnFailure")
+            }
+
+        })
+    }
     private fun GetData(): PasswordModel =
         PasswordModel(
             HesapAdi = HesapAdi.text.toString(),

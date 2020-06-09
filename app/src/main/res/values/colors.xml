@@ -12,5 +12,6 @@
     <color name="white">#FFFFFF</color>
     <color name="color_succes">#00B576</color>
     <color name="color_error">#C1272D</color>
-    <color name="color_loading">@android:color/darker_gray</color>
+    <color name="color_loading">#2866BF</color>
+    <color name="color_question">#f2c304</color>
 </resources>
