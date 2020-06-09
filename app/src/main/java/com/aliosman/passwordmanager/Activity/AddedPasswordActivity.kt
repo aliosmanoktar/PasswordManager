@@ -21,12 +21,16 @@ import com.aliosman.passwordmanager.Models.PasswordModel
 import com.aliosman.passwordmanager.Models.key_item
 import com.aliosman.passwordmanager.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class AddedPasswordActivity : AppCompatActivity() {
     var PasswordItem: PasswordModel? = null
     lateinit var HesapAdi: TextInputEditText
     lateinit var KullaniciAdi: TextInputEditText
     lateinit var Sifre: TextInputEditText
+    lateinit var HesapAdiLayout: TextInputLayout
+    lateinit var KullaniciAdiLayout: TextInputLayout
+    lateinit var SifreLayout: TextInputLayout
     lateinit var kaydet: Button
     private val TAG = javaClass.name
     lateinit var dialog: DialogAdapter
@@ -38,6 +42,9 @@ class AddedPasswordActivity : AppCompatActivity() {
         KullaniciAdi = findViewById(R.id.AddedActivity_kullanici_adi)
         Sifre = findViewById(R.id.AddedActivity_sifre)
         kaydet = findViewById(R.id.AddedActivity_kaydet)
+        HesapAdiLayout = findViewById(R.id.AddedActivity_hesap_adi_layout)
+        KullaniciAdiLayout = findViewById(R.id.AddedActivity_kullanici_adi_layout)
+        SifreLayout = findViewById(R.id.AddedActivity_sifre_layout)
         if (PasswordItem != null) {
             HesapAdi.setText(PasswordItem!!.HesapAdi)
             KullaniciAdi.setText(PasswordItem!!.KullaniciAdi)
@@ -132,6 +139,21 @@ class AddedPasswordActivity : AppCompatActivity() {
     }
 
     val kaydetClick = View.OnClickListener {
+        var error: Boolean = false
+        if (HesapAdi.text.isNullOrEmpty()) {
+            error = true
+            HesapAdiLayout.error = "Hesap Adi Boş Olamaz"
+        }
+        if (KullaniciAdi.text.isNullOrEmpty()) {
+            error = true
+            KullaniciAdiLayout.error = "Kullanıcı Adı Boş Olamaz"
+        }
+        if (Sifre.text.isNullOrEmpty()) {
+            error = true
+            SifreLayout.error = "Şifre Boş Olamaz"
+        }
+        if (error)
+            return@OnClickListener
         if (PasswordItem == null) {
             Kaydet()
             dialog.setTitle("Şifre Kaydediliyor lütfen bekleyiniz!!")
